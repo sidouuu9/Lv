@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7emlaghkem<333</title>
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💜</text></svg>">
+    <style>
+        /* ===== RESET & BASE STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #000;
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            position: fixed;
+        }
+
+        /* ===== LEVEL CONTAINERS ===== */
+        .level {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease, visibility 1s ease;
+            padding: 20px;
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .level.active {
+            visibility: visible;
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* ===== LEVEL 1 - THE TEST ===== */
+        #level-1 {
+            background: #000;
+        }
+
+        .sequence-text {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .sequence-text.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Different fonts for each line */
+        .font-1 { font-family: 'Georgia', serif; font-weight: 700; }
+        .font-2 { font-family: 'Courier New', monospace; font-weight: 400; letter-spacing: 3px; }
+        .font-3 { font-family: 'Arial', sans-serif; font-weight: 300; font-style: italic; }
+        .font-4 { font-family: 'Verdana', sans-serif; font-weight: 400; }
+
+        /* Start Button */
+        #start-btn {
+            margin-top: 3rem;
+            padding: 1rem 3rem;
+            font-size: 1.5rem;
+            background: white;
+            color: black;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: scale(0.9);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        #start-btn.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        #start-btn:hover {
+            background: #f0f0f0;
+            transform: scale(1.05);
+        }
+
+        /* Question Screen */
+        .question-screen {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease;
+        }
+
+        .question-screen.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .question {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 3rem;
+            text-align: center;
+            font-family: 'Georgia', serif;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 2rem;
+            position: relative;
+            min-height: 120px;
+        }
+
+        #yes-btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+            z-index: 10;
+        }
+
+        #yes-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        #no-btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: not-allowed;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.2);
+            position: absolute;
+            pointer-events: none;
+        }
+
+        /* ===== LEVEL 2 - EMOTION & ENERGY ===== */
+        #level-2 {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .phrase {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            margin-bottom: 2rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .phrase.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 300px;
+            max-width: 80%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            margin: 3rem 0;
+            overflow: hidden;
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ffffff, #f0f0f0);
+            border-radius: 2px;
+            transition: width 1s ease;
+        }
+
+        /* Next Button */
+        #next-btn {
+            padding: 1rem 3rem;
+            font-size: 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            opacity: 0.5;
+            pointer-events: none;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        #next-btn.ready {
+            opacity: 1;
+            pointer-events: all;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        #next-btn.ready:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* ===== LEVEL 3 - THE REWARD ===== */
+        #level-3 {
+            background: linear-gradient(135deg, #4c1d95, #2e1065, #1e1b4b);
+        }
+
+        /* Confetti */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #f0f0f0;
+            opacity: 0;
+        }
+
+        /* Letter Container */
+        .letter-container {
+            max-width: 800px;
+            width: 90%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
+        }
+
+        #level-3.active .letter-container {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .letter-content {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+        }
+
+        .signature {
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 2rem;
+            margin-top: 2rem;
+        }
+
+        .signature-line {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 0.5rem;
+            letter-spacing: 3px;
+        }
+
+        .signature-name {
+            font-size: 2rem;
+            color: white;
+            font-family: 'Georgia', serif;
+            font-style: italic;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            .sequence-text, .question {
+                font-size: 2.5rem;
+            }
+            
+            .button-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .letter-container {
+                padding: 2rem;
+            }
+            
+            .letter-content {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Level 1: The Test -->
+    <div id="level-1" class="level active">
+        <!-- Initial Sequence -->
+        <div id="init-sequence">
+            <div id="q1" class="sequence-text font-1">Are you ready?</div>
+            <div id="q2" class="sequence-text font-2">Sure?</div>
+            <div id="q3" class="sequence-text font-3">Hmm…</div>
+            <div id="q4" class="sequence-text font-4">Okay. Let's start.</div>
+        </div>
+        
+        <!-- Start Button -->
+        <button id="start-btn">START</button>
+        
+        <!-- Question Screen -->
+        <div id="question-screen" class="question-screen">
+            <div class="question">Do you love me?</div>
+            <div class="button-container">
+                <button id="yes-btn">Yes</button>
+                <button id="no-btn">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Level 2: Emotion & Energy -->
+    <div id="level-2" class="level">
+        <!-- Phrases -->
+        <div id="phrase-1" class="phrase">You chose with intention.</div>
+        <div id="phrase-2" class="phrase">Good.</div>
+        <div id="phrase-3" class="phrase">Keep going.</div>
+        
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div id="progress-bar"></div>
+        </div>
+        
+        <!-- Next Button -->
+        <button id="next-btn">One last step</button>
+    </div>
+
+    <!-- Level 3: The Reward -->
+    <div id="level-3" class="level">
+        <!-- Confetti Container -->
+        <div id="confetti-container"></div>
+        
+        <!-- Letter -->
+        <div class="letter-container">
+            <div class="letter-content">
+                I'm proud of you in a way that doesn't need noise. You carry yourself with strength, and I meet you there—steady, sure, unshaken. When I call you my baby, it's not softness, it's intention: I choose you, I hold you, and you feel it. Older or not, you know exactly why you lean into me, i love u, i adore u, u are my spark of light in the darkness, u are my warmth in the frost, i love u ikram<3
+            </div>
+            
+            <div class="signature">
+                <div class="signature-line">Always.</div>
+                <div class="signature-name">Your loving husband, Sidou</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ====== GLOBAL VARIABLES ======
+        let level1, level2, level3;
+        let startBtn, yesBtn, noBtn, nextBtn;
+        let questionScreen;
+        let progressBar;
+        let confettiContainer;
+        
+        let yesBtnSize = 1;
+        let noBtnX = 0, noBtnY = 0;
+        let noBtnAnimationFrame = null;
+        
+        // ====== INITIALIZATION ======
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cache DOM elements
+            level1 = document.getElementById('level-1');
+            level2 = document.getElementById('level-2');
+            level3 = document.getElementById('level-3');
+            startBtn = document.getElementById('start-btn');
+            yesBtn = document.getElementById('yes-btn');
+            noBtn = document.getElementById('no-btn');
+            nextBtn = document.getElementById('next-btn');
+            questionScreen = document.getElementById('question-screen');
+            progressBar = document.getElementById('progress-bar');
+            confettiContainer = document.getElementById('confetti-container');
+            
+            // Start the experience
+            startExperience();
+        });
+        
+        // ====== EXPERIENCE FLOW ======
+        function startExperience() {
+            // Show initial sequence
+            showSequence();
+            
+            // Start button click
+            startBtn.addEventListener('click', showQuestionScreen);
+            
+            // Yes button click
+            yesBtn.addEventListener('click', goToLevel2);
+            
+            // Next button click
+            nextBtn.addEventListener('click', goToLevel3);
+        }
+        
+        function showSequence() {
+            // Show each sequence text with delay
+            const q1 = document.getElementById('q1');
+            const q2 = document.getElementById('q2');
+            const q3 = document.getElementById('q3');
+            const q4 = document.getElementById('q4');
+            
+            setTimeout(() => q1.classList.add('show'), 500);
+            setTimeout(() => q2.classList.add('show'), 2000);
+            setTimeout(() => q3.classList.add('show'), 3500);
+            setTimeout(() => q4.classList.add('show'), 5000);
+            setTimeout(() => startBtn.classList.add('show'), 6000);
+        }
+        
+        function showQuestionScreen() {
+            // Hide initial sequence
+            document.getElementById('init-sequence').style.opacity = '0';
+            startBtn.style.opacity = '0';
+            
+            // Show question screen
+            setTimeout(() => {
+                questionScreen.classList.add('active');
+                initNoButtonInteraction();
+            }, 500);
+        }
+        
+        // ====== NO BUTTON ESCAPE LOGIC ======
+        function initNoButtonInteraction() {
+            let mouseX = 0, mouseY = 0;
+            
+            // Track mouse movement
+            document.addEventListener('mousemove', function(e) {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                
+                // Check distance between mouse and no button
+                const noBtnRect = noBtn.getBoundingClientRect();
+                const btnCenterX = noBtnRect.left + noBtnRect.width / 2;
+                const btnCenterY = noBtnRect.top + noBtnRect.height / 2;
+                
+                const distance = Math.sqrt(
+                    Math.pow(mouseX - btnCenterX, 2) + Math.pow(mouseY - btnCenterY, 2)
+                );
+                
+                // If mouse is too close, move the button
+                if (distance < 100) {
+                    // Calculate escape direction
+                    const angle = Math.atan2(btnCenterY - mouseY, btnCenterX - mouseX);
+                    const force = 15;
+                    
+                    noBtnX += Math.cos(angle) * force;
+                    noBtnY += Math.sin(angle) * force;
+                    
+                    // Add random movement
+                    noBtnX += (Math.random() - 0.5) * 20;
+                    noBtnY += (Math.random() - 0.5) * 20;
+                    
+                    // Apply constraints
+                    const maxMove = 200;
+                    noBtnX = Math.max(-maxMove, Math.min(maxMove, noBtnX));
+                    noBtnY = Math.max(-maxMove, Math.min(maxMove, noBtnY));
+                    
+                    // Apply transformation
+                    noBtn.style.transform = `translate(${noBtnX}px, ${noBtnY}px)`;
+                    
+                    // Make YES button grow
+                    yesBtnSize += 0.1;
+                    yesBtn.style.transform = `scale(${yesBtnSize})`;
+                    
+                    // Change YES button text
+                    if (yesBtnSize > 1.2) yesBtn.textContent = 'YES';
+                    if (yesBtnSize > 1.5) yesBtn.textContent = 'YES.';
+                }
+                
+                // Smooth return to position
+                if (noBtnAnimationFrame) cancelAnimationFrame(noBtnAnimationFrame);
+                noBtnAnimationFrame = requestAnimationFrame(returnToPosition);
+            });
+        }
+        
+        function returnToPosition() {
+            // Slowly return no button to original position
+            noBtnX *= 0.9;
+            noBtnY *= 0.9;
+            
+            if (Math.abs(noBtnX) < 0.1) noBtnX = 0;
+            if (Math.abs(noBtnY) < 0.1) noBtnY = 0;
+            
+            noBtn.style.transform = `translate(${noBtnX}px, ${noBtnY}px)`;
+            
+            if (Math.abs(noBtnX) > 0.1 || Math.abs(noBtnY) > 0.1) {
+                noBtnAnimationFrame = requestAnimationFrame(returnToPosition);
+            }
+        }
+        
+        // ====== LEVEL 2 LOGIC ======
+        function goToLevel2() {
+            // Add vibration effect if available
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+            
+            // Hide Level 1
+            level1.classList.remove('active');
+            
+            // Show Level 2 after delay
+            setTimeout(() => {
+                level2.classList.add('active');
+                startLevel2Sequence();
+            }, 800);
+        }
+        
+        function startLevel2Sequence() {
+            // Reset progress
+            progressBar.style.width = '0%';
+            
+            // Reset phrases
+            document.querySelectorAll('.phrase').forEach(p => {
+                p.classList.remove('show');
+            });
+            
+            // Reset next button
+            nextBtn.classList.remove('ready');
+            
+            // Sequence timing
+            setTimeout(() => {
+                // Show phrase 1
+                document.getElementById('phrase-1').classList.add('show');
+                progressBar.style.width = '33%';
+            }, 500);
+            
+            setTimeout(() => {
+                // Show phrase 2
+                document.getElementById('phrase-2').classList.add('show');
+                progressBar.style.width = '66%';
+            }, 2500);
+            
+            setTimeout(() => {
+                // Show phrase 3
+                document.getElementById('phrase-3').classList.add('show');
+                progressBar.style.width = '100%';
+            }, 4500);
+            
+            setTimeout(() => {
+                // Enable next button
+                nextBtn.classList.add('ready');
+                if (navigator.vibrate) navigator.vibrate(100);
+            }, 5500);
+        }
+        
+        // ====== LEVEL 3 LOGIC ======
+        function goToLevel3() {
+            // Add vibration
+            if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
+            
+            // Hide Level 2
+            level2.classList.remove('active');
+            
+            // Show Level 3 after delay
+            setTimeout(() => {
+                level3.classList.add('active');
+                createConfetti();
+            }, 800);
+        }
+        
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#c56cf0'];
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                
+                // Random properties
+                const size = Math.random() * 10 + 5;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const left = Math.random() * 100;
+                const delay = Math.random() * 2;
+                const duration = 3 + Math.random() * 4;
+                
+                confetti.style.width = `${size}px`;
+                confetti.style.height = `${size}px`;
+                confetti.style.backgroundColor = color;
+                confetti.style.left = `${left}%`;
+                confetti.style.top = '-20px';
+                confetti.style.borderRadius = '2px';
+                
+                // Add to container
+                confettiContainer.appendChild(confetti);
+                
+                // Animate confetti
+                setTimeout(() => {
+                    confetti.style.transition = `all ${duration}s cubic-bezier(0.1, 0.8, 0.2, 1)`;
+                    confetti.style.opacity = '1';
+                    confetti.style.transform = `translateY(calc(100vh + 20px)) rotate(${Math.random() * 720}deg)`;
+                    
+                    // Remove after animation
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, duration * 1000);
+                }, delay * 1000);
+            }
+        }
+    </script>
+</body>
+</html>
